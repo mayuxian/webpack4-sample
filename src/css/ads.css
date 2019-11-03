@@ -1,0 +1,14 @@
+.logo {
+  /* 若图片更改目录，则也需要更改相对目录，有待解决 */
+  height: 100px;
+  width: 100px;
+  background: url('./../img/logo.jpg');
+  background-size: 100px 100px;
+}
+
+.cat {
+  height: 100px;
+  width: 100px;
+  background: url('./../img/cat.jpg');
+  background-size: 100px 100px;
+}
