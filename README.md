@@ -5,6 +5,7 @@
 2. responsive-loader和file-loader 有什么区别？
 3. stylus样式？
 4. autoprefixer在webpack.config.js中引入的方式  优先级低
+5. html-loader什么时候用？
 
 ## Infos
 

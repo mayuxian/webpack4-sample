@@ -24,7 +24,7 @@
 </template>
 
 <script>
-
+import './css/index.css';
 export default {
   name: "ads",
   data() {
@@ -33,8 +33,6 @@ export default {
 }
 </script>
 
-// <style src="./css/index.less" scoped></style>
-// <style src="./css/index.scss" scoped></style>
 <style lang="css" src="./css/ads.css"  scoped>
 /* @import 和style src的区别
 https://segmentfault.com/q/1010000011948454/a-1020000011948667 

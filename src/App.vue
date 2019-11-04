@@ -5,7 +5,7 @@
       <!-- 广告 -->
       <ads></ads>
     </div>
-    <div>
+    <div class="css">
       <h2>内容:</h2>
     </div>
   </div>
@@ -28,5 +28,6 @@ export default {
 }
 </script>
 
-<style   scoped>
+<style  scoped>
+/* @import "./css/index.css"; */
 </style>

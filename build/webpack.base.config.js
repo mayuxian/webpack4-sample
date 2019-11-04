@@ -5,14 +5,16 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 // const VueLoaderConfig = require('./../vue.config.js')
 const autoprefixer = require('autoprefixer');
 module.exports = {
-  // entry: {
-  //   main: './src/index.js',  //默认名称moren 
-  //   home: ""
-  // },
-  entry: './src/index.js',
+  entry: {
+    main: "./src/index.js",  //默认名称main 
+    home: "./src/home.js"
+  },
+  // entry: './src/index.js',
   output: {
     path: path.join(__dirname, "./../dist"),
     // filename: "bundle.js",
@@ -50,6 +52,7 @@ module.exports = {
         use: [
           "style-loader",
           // "vue-style-loader",
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
@@ -60,23 +63,29 @@ module.exports = {
         ]
       },
       {
-        test: "/\.less$/",
-        use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader']
+        test: /\.less$/,
+        use: ['style-loader', MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", 'less-loader']
       },
       {
-        test: "/\.scss$/",
-        loader: ['style!css!postcss!sass']
+        test: /\.scss$/,
+        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader', "postcss-loader",'sass-loader']
+        // loader: ['style-loader!css-loader!postcss-loader!sass-loader'], //字符串时要是loader
       }
     ]
   },
   // postcss: [autoprefixer()],
+  // postcss: [autoprefixer()],
   plugins: [
     new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css"
+    }),
     new HtmlWebpackPlugin({
       title: "Webpack4-Config-Sample",
       filename: "index.html",
       template: path.join(__dirname, "./../src/index.html"),
-      hash: true, //引入js后面会有 ？hash值，避免缓存的影响
+      hash: true, //引入js: main.js？hash值，避免缓存的影响
       minify: {
         removeAttributeQuotes: true //移除双引号
       }
@@ -93,6 +102,7 @@ module.exports = {
     ]),
     new VueLoaderPlugin()
   ],
+  //多入口抽取css到一个文件：https://segmentfault.com/q/1010000017990233/
   optimization: {
     minimize: false
   }
