@@ -2,6 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config');
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = merge(baseConfig, {
   mode: "production",
@@ -16,7 +18,16 @@ module.exports = merge(baseConfig, {
   module: {
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new CleanWebpackPlugin({
+      cleanAfterEveryBuildPatterns: ['!dll/**/*']
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+    new CopyWebpackPlugin([
+      {
+        from: './src/static',
+        to: "static"
+      }
+    ]),
   ],
   optimization: {
     minimize: false

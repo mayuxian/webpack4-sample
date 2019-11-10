@@ -1,9 +1,7 @@
 const path = require('path');
 
 const webpack = require('webpack');
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -68,7 +66,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader', "postcss-loader",'sass-loader']
+        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader', "postcss-loader", 'sass-loader']
         // loader: ['style-loader!css-loader!postcss-loader!sass-loader'], //字符串时要是loader
       }
     ]
@@ -76,7 +74,7 @@ module.exports = {
   // postcss: [autoprefixer()],
   // postcss: [autoprefixer()],
   plugins: [
-    new CleanWebpackPlugin(),
+    new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "[id].css"
@@ -93,17 +91,16 @@ module.exports = {
     new webpack.ProvidePlugin({
       $: "jquery"
     }
-    ),
-    new CopyWebpackPlugin([
-      {
-        from: './src/static',
-        to: "static"
-      }
-    ]),
-    new VueLoaderPlugin()
+    )
   ],
   //多入口抽取css到一个文件：https://segmentfault.com/q/1010000017990233/
   optimization: {
-    minimize: false
+    minimize: false,
+    // chunkIds: 'named',
+    // moduleIds: 'hashed',
+    splitChunks: {
+      chunks: 'all'
+    },
+    runtimeChunk: true
   }
 }
