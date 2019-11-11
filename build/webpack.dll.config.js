@@ -6,7 +6,7 @@ module.exports = {
   mode: "production",
   entry: {
     vendor: ['vue', 'vuex', 'vue-router'],
-    utils: ['axios'],
+    utils: ['axios', 'jquery'],
     // vendor: ['vue/dist/vue.runtime.esm.js'], //可只打包这一个文件
   },
   output: {
@@ -16,11 +16,14 @@ module.exports = {
     //libraryTarget: 'umd'  //默认为var
   },
   plugins: [
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin(
+      // {
+      //   cleanAfterEveryBuildPatterns: ['!dll/**/*']
+      // }
+    ),
     new webpack.DllPlugin({
       name: "dll_[name]",
       path: path.join(__dirname, "../dll/", '[name].manifest.json'),
-      // context: path.join(__dirname, "")  //默认context的值为：工程根目录
     })
   ]
 };

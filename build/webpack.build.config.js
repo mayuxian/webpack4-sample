@@ -6,7 +6,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const manifest = require('../dll/vendor.manifest.json');
+//TODO:动态生成
+const vendorManifest = require('../dll/vendor.manifest.json');
+const utilsManifest = require('../dll/utils.manifest.json');
 
 module.exports = merge(baseConfig, {
   mode: "production",
@@ -24,12 +26,12 @@ module.exports = merge(baseConfig, {
       }
     }),
     new webpack.DllReferencePlugin({
-      // context: path.join(__dirname, ""),
-      manifest: manifest
+      manifest: vendorManifest
     }),
-    new CleanWebpackPlugin({
-      cleanAfterEveryBuildPatterns: ['!dll/**/*']
+    new webpack.DllReferencePlugin({
+      manifest: utilsManifest
     }),
+    new CleanWebpackPlugin(),
     new CopyWebpackPlugin([
       {
         from: './src/static',

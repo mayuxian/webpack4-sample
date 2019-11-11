@@ -5,6 +5,8 @@ import { getInfos } from './a';
 console.log('2')
 getInfos('test');
 
+// import 'jquery';
+// import 'axios';
 import './css/index.less';
 import './css/index.scss';
 
