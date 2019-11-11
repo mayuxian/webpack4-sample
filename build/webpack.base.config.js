@@ -1,7 +1,6 @@
 const path = require('path');
 
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -78,15 +77,6 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "[id].css"
-    }),
-    new HtmlWebpackPlugin({
-      title: "Webpack4-Config-Sample",
-      filename: "index.html",
-      template: path.join(__dirname, "./../src/index.html"),
-      hash: true, //引入js: main.js？hash值，避免缓存的影响
-      minify: {
-        removeAttributeQuotes: true //移除双引号
-      }
     }),
     new webpack.ProvidePlugin({
       $: "jquery"
