@@ -2,6 +2,10 @@ const webpack = require('webpack');
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
+//TODO:
+/**
+ * runtime~main.xxx.bundle.js与runtime~home.xxx.bundle.js重复，如何公用？
+ */
 module.exports = {
   mode: "production",
   entry: {

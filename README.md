@@ -6,7 +6,17 @@
 3. stylus样式？
 4. autoprefixer在webpack.config.js中引入的方式  优先级低
 5. html-loader什么时候用？
-6. 
+6. 使用摇树优化，TreeShaking  [未验证]
+   https://segmentfault.com/a/1190000016767989?utm_source=tag-newest
+7. 使用splitChunk.cacheGroup
+8. 使用Happyhack或thread-loader，异步并行打包
+9. 使用webpack.DllPlugin和webpack.DllReferencePlugin提取vendor
+10. 使用terser-webpack-plugin  或 WebpackParallelUglifyPlugin？
+11. js文件拆包
+12. css文件拆包
+13. CompressionWebpackPlugin和UglifyPlugin ？
+14. vue-style-loader??
+15. OptimizeCSSAssetsPlugin ?
 
 ## Infos
 

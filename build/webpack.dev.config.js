@@ -22,6 +22,7 @@ module.exports = merge(baseConfig, {
       cleanAfterEveryBuildPatterns: ['!dll/**/*']
     }),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(), // HMR 提示更新文件名，而不是更新文件模块id
     new CopyWebpackPlugin([
       {
         from: './src/static',

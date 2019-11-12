@@ -3,6 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 // const VueLoaderConfig = require('./../vue.config.js')
 const autoprefixer = require('autoprefixer');
@@ -35,14 +36,19 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|jpg|gif)$/i,
-        use: [{
-          loader: 'url-loader',
+        test: /\.jsx?$/,
+        exclude: "/(node_modules)/",
+        use: {
+          loader: "babel-loader",
           options: {
-            limit: 10 * 1024,
-            name: 'img/[name]-[hash:6].[ext]'
+            presets: [["@babel/preset-env", {
+              //设置false表示取消babel/preset-env转换成commonjs(默认)的方式
+              modules: false,  //改成false，支持es6，是为了摇树优化
+              loose: true  //"normal"接近es6,false接近es5
+            }]],
+            plugins: ["@babel/plugin-transform-runtime"]
           }
-        }]
+        }
       },
       {
         test: /\.css$/,
@@ -66,13 +72,45 @@ module.exports = {
       {
         test: /\.scss$/,
         use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader', "postcss-loader", 'sass-loader']
-        // loader: ['style-loader!css-loader!postcss-loader!sass-loader'], //字符串时要是loader
-      }
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif|svg)$/i,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 10 * 1024,
+            name: 'images/[name]-[hash:6].[ext]'
+          }
+        }]
+      },
+      {
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)$/i,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 10 * 1024,
+            name: 'media/[name]-[hash:6].[ext]'
+          }
+        }]
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)$/i,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 10 * 1024,
+            name: 'fonts/[name]-[hash:6].[ext]'
+          }
+        }]
+      },
     ]
   },
   // postcss: [autoprefixer()],
   // postcss: [autoprefixer()],
   plugins: [
+    new CleanWebpackPlugin({
+      // cleanAfterEveryBuildPatterns: ['!dll/**/*']
+    }),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
       filename: "[name].css",
@@ -80,17 +118,7 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       $: "jquery"
-    }
+     }
     )
-  ],
-  //多入口抽取css到一个文件：https://segmentfault.com/q/1010000017990233/
-  optimization: {
-    minimize: false,
-    // chunkIds: 'named',
-    // moduleIds: 'hashed',
-    splitChunks: {
-      chunks: 'all'
-    },
-    runtimeChunk: true
-  }
+  ]
 }

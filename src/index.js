@@ -1,14 +1,14 @@
 import Vue from 'vue';
 import App from './App.vue'
 
-import { getInfos } from './a';
-console.log('2')
-getInfos('test');
+import './lib/3rd';
+import './test';
 
-// import 'jquery';
-// import 'axios';
 import './css/index.less';
 import './css/index.scss';
+
+import _ from 'lodash';
+console.log(_.debounce);
 
 new Vue({
   el: "#app",
