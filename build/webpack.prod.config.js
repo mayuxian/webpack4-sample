@@ -38,9 +38,9 @@ module.exports = merge(baseConfig, {
     new webpack.DllReferencePlugin({
       manifest: vendorManifest
     }),
-    new webpack.DllReferencePlugin({
-      manifest: utilsManifest
-    }),
+    // new webpack.DllReferencePlugin({
+    //   manifest: utilsManifest
+    // }),
     new CopyWebpackPlugin([
       {
         from: './src/static',
@@ -78,43 +78,44 @@ module.exports = merge(baseConfig, {
       //   },
       // }),
       new UglifyJsPlugin({
-        uglifyOptions: {
-          compress,
-          mangle: false,
-          output: {
-            beautify: true
-          }
-        }
+        // uglifyOptions: {
+        //   compress: {},
+        //   mangle: false,
+        //   output: {
+        //     beautify: true
+        //   }
+        // }
       })
     ],
-    // splitChunks: {
-    //   chunks: "all", // 要分割哪些模块：all（推荐）, async(默认，只分隔异步代码), and initial
-    //   minSize: 10 * 1024,
-    //   maxSize: 5 * 1024,
-    //   minChunks: 1,
-    //   maxAsyncRequests: 5,
-    //   automaticNameDelimiter: "~",
-    //   name: true,
-    //   // cacheGroups: {
-    //   //   vendors: {
-    //   //     test: /[\\/]node_modules[\\/]/,
-    //   //     priority: -10,
-    //   //     filename: 'vendors.js',
-    //   //     enforce: true, //无视minChunks、maxAsyncRequests等选项
-    //   //   },
-    //   //   default: {
-    //   //     minChunks: 2,
-    //   //     priority: -20,
-    //   //     reuseExistingChunk: true, //复用
-    //   //   },
-    //   //   styles: {
-    //   //     name: "styles",
-    //   //     test: /\.less$/,
-    //   //     chunks: "all",
-    //   //     enforce: true
-    //   //   }
-    //   // }
-    // },
+    splitChunks: {
+      chunks: "all", // 要分割哪些模块：all（推荐）, async(默认，只分隔异步代码), and initial
+      minSize: 30000,
+      maxSize: 100000,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      automaticNameDelimiter: "~",
+      name: true,
+      // cacheGroups: {
+      //   vendors: {
+      //     test: /[\\/]node_modules[\\/]/,
+      //     minChunks: 1,
+      //     priority: -10,
+      //     // filename: 'vendors.js',
+      //     // enforce: true, //无视minChunks、maxAsyncRequests等选项
+      //   },
+      //   default: {
+      //     minChunks: 2,
+      //     priority: -20,
+      //     reuseExistingChunk: true, //复用
+      //   },
+      //   styles: {
+      //     name: "styles",
+      //     test: /\.less$/,
+      //     chunks: "all",
+      //     enforce: true
+      //   }
+      // }
+    },
     //package.json中sideEffects标记有副作用代码，不使用tree-shaking/
     usedExports: true,  //使用export方式，可进行摇树优化。
     sideEffects: true, //可识别某些库中的配置的摇树优化的功能无副作用，默认false 忽略

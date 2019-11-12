@@ -9,6 +9,8 @@ import './css/index.scss';
 
 import _ from 'lodash';
 console.log(_.debounce);
+import axios from 'axios';
+console.log(axios.CancelToken);
 
 new Vue({
   el: "#app",

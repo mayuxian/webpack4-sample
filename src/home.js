@@ -7,6 +7,8 @@ getInfos('test');
 
 import _ from 'lodash';
 console.log(_.debounce);
+import axios from 'axios';
+console.log(axios.CancelToken);
 
 import './css/index.less';
 import './css/index.scss';
