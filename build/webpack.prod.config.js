@@ -38,9 +38,9 @@ module.exports = merge(baseConfig, {
     new webpack.DllReferencePlugin({
       manifest: vendorManifest
     }),
-    // new webpack.DllReferencePlugin({
-    //   manifest: utilsManifest
-    // }),
+    new webpack.DllReferencePlugin({
+      manifest: utilsManifest
+    }),
     new CopyWebpackPlugin([
       {
         from: './src/static',
@@ -57,35 +57,35 @@ module.exports = merge(baseConfig, {
     minimize: true,
     minimizer: [
       // new OptimizeCSSAssetsPlugin(),
-      // new TerserWebpackPlugin({
-      //   cache: false,
-      //   parallel: true,
-      //   sourceMap: true,  //如果production模式使用sourceMap，则此必须设置成true
-      //   terserOptions: {
-      //     // ecma: undefined,
-      //     // warnings: false,
-      //     // parse: {},
-      //     compress: {},
-      //     // mangle: true, // Note `mangle.properties` is `false` by default.
-      //     module: false,
-      //     // output: null,
-      //     // toplevel: false,
-      //     // nameCache: null,
-      //     // ie8: false,
-      //     // keep_classnames: undefined,
-      //     // keep_fnames: false,
-      //     // safari10: false,
-      //   },
-      // }),
-      new UglifyJsPlugin({
-        // uglifyOptions: {
+      new TerserWebpackPlugin({
+        cache: false,
+        parallel: true,
+        sourceMap: true,  //如果production模式使用sourceMap，则此必须设置成true
+        // terserOptions: {
+        //   // ecma: undefined,
+        //   // warnings: false,
+        //   // parse: {},
         //   compress: {},
-        //   mangle: false,
-        //   output: {
-        //     beautify: true
-        //   }
-        // }
-      })
+        //   // mangle: true, // Note `mangle.properties` is `false` by default.
+        //   module: false,
+        //   // output: null,
+        //   // toplevel: false,
+        //   // nameCache: null,
+        //   // ie8: false,
+        //   // keep_classnames: undefined,
+        //   // keep_fnames: false,
+        //   // safari10: false,
+        // },
+      }),
+      // new UglifyJsPlugin({
+      //   // uglifyOptions: {
+      //   //   compress: {},
+      //   //   mangle: false,
+      //   //   output: {
+      //   //     beautify: true
+      //   //   }
+      //   // }
+      // })
     ],
     splitChunks: {
       chunks: "all", // 要分割哪些模块：all（推荐）, async(默认，只分隔异步代码), and initial
@@ -95,35 +95,35 @@ module.exports = merge(baseConfig, {
       maxAsyncRequests: 5,
       automaticNameDelimiter: "~",
       name: true,
-      // cacheGroups: {
-      //   vendors: {
-      //     test: /[\\/]node_modules[\\/]/,
-      //     minChunks: 1,
-      //     priority: -10,
-      //     // filename: 'vendors.js',
-      //     // enforce: true, //无视minChunks、maxAsyncRequests等选项
-      //   },
-      //   default: {
-      //     minChunks: 2,
-      //     priority: -20,
-      //     reuseExistingChunk: true, //复用
-      //   },
-      //   styles: {
-      //     name: "styles",
-      //     test: /\.less$/,
-      //     chunks: "all",
-      //     enforce: true
-      //   }
-      // }
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          minChunks: 1,
+          priority: -10,
+          // filename: 'vendors.js',
+          // enforce: true, //无视minChunks、maxAsyncRequests等选项
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true, //复用
+        },
+        styles: {
+          name: "styles",
+          test: /\.less$/,
+          chunks: "all",
+          enforce: true
+        }
+      }
     },
     //package.json中sideEffects标记有副作用代码，不使用tree-shaking/
     usedExports: true,  //使用export方式，可进行摇树优化。
     sideEffects: true, //可识别某些库中的配置的摇树优化的功能无副作用，默认false 忽略
-    // chunkIds: 'named',
-    // moduleIds: 'hashed',
-    // splitChunks: {
-    //   chunks: 'all'
-    // },
-    // runtimeChunk: true
+    chunkIds: 'named',
+    moduleIds: 'hashed',
+    runtimeChunk: true,
+    // runtimeChunk: {
+    //   name: entrypoint => `manifest.${entrypoint.name}`
+    // }
   }
 })
