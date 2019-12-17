@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = merge(baseConfig, {
   mode: "development",
-  devtool: 'source-map',
+  devtool: 'cheap-module-eval-source-map',
   output: {
     publicPath: '/'
   },

@@ -1,4 +1,5 @@
 const path = require('path');
+const os = require('os');
 const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -8,17 +9,23 @@ const vendorManifest = require('../dll/vendor.manifest.json');
 const utilsManifest = require('../dll/utils.manifest.json');
 
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-// const threadLoader = require('thread-loader');
-// const os = require('os');
 
-let threadLoaderOptions = {
+const happyPack = require('happypack');
+const happyThreadPool = happyPack.ThreadPool({ size: os.cpus().length });
+
+const threadLoader = require('thread-loader');
+const threadLoaderOptions = {
   // 产生的 worker 的数量，默认是 cpu 的核心数
-  workers: 2,//os.cpus().length,//2,
+  workers: os.cpus().length,//os.cpus().length,//2,
   // 一个 worker 进程中并行执行工作的数量
   // 默认为 20
   workerParallelJobs: 50,
   // 额外的 node.js 参数
-  workerNodeArgs: ['--max-old-space-size', '1024'],
+  workerNodeArgs: ['--max-old-space-size=1024'],
+  // Allow to respawn a dead worker pool
+  // respawning slows down the entire compilation
+  // and should be set to false for development
+  poolRespawn: false,
   // 闲置时定时删除 worker 进程
   // 默认为 500ms
   // 可以设置为无穷大， 这样在监视模式(--watch)下可以保持 worker 持续存在
@@ -32,10 +39,11 @@ let threadLoaderOptions = {
   name: "my-pool"
 }
 //预热
-// threadLoader.warmup({}, [
-//   'babel-loader',
-//   'sass-loader',
-// ]);
+threadLoader.warmup(threadLoaderOptions, [
+  'babel-loader',
+  '@babel/preset-env',
+  'sass-loader',
+]);
 
 // const VueLoaderConfig = require('./../vue.config.js')
 const autoprefixer = require('autoprefixer');
@@ -70,10 +78,10 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: "/(node_modules)/",
         use: [
-          // {
-          //   loader: "thread-loader",
-          //   options: threadLoaderOptions
-          // },
+          {
+            loader: "thread-loader",
+            options: threadLoaderOptions
+          },
           {
             loader: "babel-loader",
             options: {
@@ -84,8 +92,30 @@ module.exports = {
               }]],
               plugins: ["@babel/plugin-transform-runtime"]
             }
-          }]
+          }
+        ]
       },
+      // {
+      //   test: /\.jsx?$/,
+      //   exclude: "/(node_modules)/",
+      //   // loader: "happypack/loader?id=babel",
+      //   use: [
+      //     // {
+      //     //   loader: "thread-loader",
+      //     //   options: threadLoaderOptions
+      //     // },
+      //     {
+      //       loader: "babel-loader",
+      //       options: {
+      //         presets: [["@babel/preset-env", {
+      //           //设置false表示取消babel/preset-env转换成commonjs(默认)的方式
+      //           modules: false,  //改成false，支持es6，是为了摇树优化
+      //           loose: true  //"normal"接近es6,false接近es5
+      //         }]],
+      //         plugins: ["@babel/plugin-transform-runtime"]
+      //       }
+      //     }]
+      // },
       {
         test: /\.css$/,
         use: [
@@ -165,9 +195,20 @@ module.exports = {
       filename: "[name].css",
       chunkFilename: "[id].css"
     }),
-    new webpack.ProvidePlugin({
+    new webpack.ProvidePlugin({  //或使用expose-loader
       $: "jquery"
-    }
-    )
+    }),
+    // new happyPack({
+    //   //用id来标识 happypack处理那里类文件
+    //   id: 'babel',
+    //   //如何处理  用法和loader 的配置一样
+    //   loaders: [{
+    //     loader: 'babel-loader?cacheDirectory=true',
+    //   }],
+    //   //共享进程池
+    //   threadPool: happyThreadPool,
+    //   //允许 HappyPack 输出日志
+    //   verbose: true,
+    // })
   ]
 }

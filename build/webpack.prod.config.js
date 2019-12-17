@@ -5,7 +5,7 @@ const baseConfig = require('./webpack.base.config');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
-
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const UglifyJS = require('uglify-es');
 const DefaultUglifyJsOptions = UglifyJS.default_options();
@@ -23,6 +23,7 @@ module.exports = merge(baseConfig, {
   output:{
     publicPath: "./"  //配置后引用的js的src首位会有/，则file协议请求报错，找不到文件
   },
+  devtool: 'cheap-module-eval-source-map',
   module: {
 
   },
@@ -44,7 +45,7 @@ module.exports = merge(baseConfig, {
   ],
   //多入口抽取css到一个文件：https://segmentfault.com/q/1010000017990233/
   optimization: {
-    minimize: true,
+    minimize: false,
     minimizer: [
       // new OptimizeCSSAssetsPlugin(),
       new TerserWebpackPlugin({
