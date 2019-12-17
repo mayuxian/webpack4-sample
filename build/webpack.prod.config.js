@@ -16,11 +16,13 @@ for (let compressOption in compress) {
 compress.unused = true;
 
 //TODO:动态生成
-const vendorManifest = require('../dll/vendor.manifest.json');
-const utilsManifest = require('../dll/utils.manifest.json');
+
 
 module.exports = merge(baseConfig, {
   mode: "production",
+  output:{
+    publicPath: "./"  //配置后引用的js的src首位会有/，则file协议请求报错，找不到文件
+  },
   module: {
 
   },
@@ -35,22 +37,10 @@ module.exports = merge(baseConfig, {
         removeAttributeQuotes: true //移除双引号
       }
     }),
-    new webpack.DllReferencePlugin({
-      manifest: vendorManifest
+    new webpack.HashedModuleIdsPlugin(),
+    new CleanWebpackPlugin({
+      // cleanAfterEveryBuildPatterns: ['!dll/**/*']
     }),
-    new webpack.DllReferencePlugin({
-      manifest: utilsManifest
-    }),
-    new CopyWebpackPlugin([
-      {
-        from: './src/static',
-        to: "static"
-      },
-      {
-        from: "./dll",
-        to: "dll"
-      }
-    ]),
   ],
   //多入口抽取css到一个文件：https://segmentfault.com/q/1010000017990233/
   optimization: {

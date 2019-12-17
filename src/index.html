@@ -4,14 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title><%=htmlWebpackPlugin.options.title%></title>
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://http://localhost:53000/"> -->
+
+  <link rel="icon" href="./img/ico/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="./img/ico/favicon.ico" type="image/x-icon" />
+
+  <title><%= htmlWebpackPlugin.options.title %></title>
   <!-- <link rel="stylesheet" type="text/css" href="./css/index.css"> -->
 </head>
 <body>
   <div id="app" >
 
   </div>
-  //TODO:需要动态补充dll文件
   <script src="./dll/verdor.dll.js"></script>
   <script src="./dll/utils.dll.js"></script>
 </body>
